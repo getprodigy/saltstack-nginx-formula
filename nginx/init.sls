@@ -28,10 +28,12 @@ vhost_{{ k }}:
   file:
     - {{ f_fun }}
     - name: {{ v.path|default(datamap.vhosts.path|default('/etc/nginx/sites-available') ~ '/' ~ datamap.vhosts.name_prefix|default('') ~ v_name ~ datamap.vhosts.name_suffix|default('')) }}
+    {% if v.ensure|default('managed') in ['managed'] %}
     - user: root
     - group: root
     - mode: 600
     - contents_pillar: nginx:vhosts:{{ v_name }}:plain
+    {% endif %}
     - watch_in:
       - service: nginx
 
